@@ -1,4 +1,4 @@
-# CFEforC
+# CFE_for_C
 A compiler, formatter and executer for C
 
 ## Environments
