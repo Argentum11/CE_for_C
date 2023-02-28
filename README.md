@@ -6,6 +6,8 @@ To use this repository, you need
  * gcc 4.6.1
  * flex 2.5.4
  * bison 2.4.1
+ 
+WARNING: Please don't install flex and bison under a path that has any empty space (ex: C:\Program Files (x86) ), select a path without empty space (ex: C:\compiler)
 
 Run the following commands to test if gcc, flex and bison are installed
 ```
