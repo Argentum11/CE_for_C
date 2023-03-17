@@ -1,5 +1,5 @@
 %{
-#include "example2.tab.h"
+#include "CFE.tab.h"
 %}
 
 %%
