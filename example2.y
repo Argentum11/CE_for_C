@@ -11,6 +11,11 @@ typedef struct {
 %token STORE END PRINT
 %token ADD SUB MUL DIV ABS LOG
 %token EOL
+%token POW
+%token SQRT
+%token MOD
+%left '-' '+'
+%left '*' '/'
 
 %%
 
@@ -30,11 +35,13 @@ exp:factor {$$ = $1;}
 factor:term {$$=$1;}
   |factor MUL term{$$=$1*$3;}
   |factor DIV term{$$=$1/$3;}
+  |factor MOD term{$$=$1%$3;}
   ;
-  
+
 term:NUMBER {$$=$1;}
   |LOG term {$$ = log($2);}
   |ABS exp ABS {$$=$2>=0?$2:-$2;}
+  |POW term{$$=pow($1,$2);}
   |'(' exp ')' { $$ = $2; }
   ;
 %%
