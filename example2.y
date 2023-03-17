@@ -6,7 +6,6 @@ typedef struct {
   char* name;
 } myVar;
 %}
-
 %token NUMBER VAR
 %token STORE END PRINT
 %token ADD SUB MUL DIV ABS LOG
@@ -14,9 +13,9 @@ typedef struct {
 %token POW
 %token SQRT
 %token MOD
+%token COMMA
 %left '-' '+'
-%left '*' '/'
-
+%left '*' '/' '^'
 %%
 
 
@@ -29,22 +28,24 @@ calclist:
 exp:factor {$$ = $1;}
   |exp ADD factor{$$=$1+$3;}
   |exp SUB factor{$$=$1-$3;}
+  |exp POW factor{$$=pow($1,$3);}
   |SUB factor{$$=-$2;}
   ;
 
-factor:term {$$=$1;}
+factor:term {$$=$1;} 
   |factor MUL term{$$=$1*$3;}
   |factor DIV term{$$=$1/$3;}
   |factor MOD term{$$=$1%$3;}
   ;
 
-term:NUMBER {$$=$1;}
+term:NUMBER {$$=$1;}  
   |LOG term {$$ = log($2);}
-  |ABS exp ABS {$$=$2>=0?$2:-$2;}
-  |POW '(' exp ',' exp ')' {$$ = pow($3, $5);}
-  |SQRT '(' exp ')' {$$ = sqrt($3);}
+  |ABS exp ABS {$$=$2>=0?$2:-$2;}  
+  |SQRT '(' exp ')' {$$ = sqrt($3);} 
   |'(' exp ')' { $$ = $2; }
   ;
+
+
 %%
 
 main(int argc,char **argv){
