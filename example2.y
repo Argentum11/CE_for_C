@@ -41,7 +41,8 @@ factor:term {$$=$1;}
 term:NUMBER {$$=$1;}
   |LOG term {$$ = log($2);}
   |ABS exp ABS {$$=$2>=0?$2:-$2;}
-  |POW term{$$=pow($1,$2);}
+  |POW '(' exp ',' exp ')' {$$ = pow($3, $5);}
+  |SQRT '(' exp ')' {$$ = sqrt($3);}
   |'(' exp ')' { $$ = $2; }
   ;
 %%
