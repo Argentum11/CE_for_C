@@ -24,7 +24,6 @@ calclist:
 exp:factor {$$ = $1;}
   |exp ADD factor{$$=$1+$3;}
   |exp SUB factor{$$=$1-$3;}
-  |SUB factor{$$=-$2;}
   ;
 
 factor:term {$$=$1;}

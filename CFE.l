@@ -14,7 +14,7 @@
 "log"   {return LOG;}
 "print" {return PRINT;}
 [()]    {return yytext[0]; }
-[0-9]+ 	{yylval=atoi(yytext);return NUMBER;}
+[-]?[0-9]+ 	{yylval=atoi(yytext);return NUMBER;}
 \n  	{return EOL;}
 [ \t] 	{/*空白忽略*/}
 [_a-zA-Z][_a-zA-z0-9]*	{  return VAR;}
