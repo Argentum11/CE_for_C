@@ -1,5 +1,6 @@
 %{
 #include "CFE.tab.h"
+#include <string.h>
 %}
 
 %%
@@ -14,6 +15,11 @@
 "log"   {return LOG;}
 "print" {return PRINT;}
 [()]    {return yytext[0]; }
+[(][-][0-9]+[)] 	{
+    yytext[0]=' '; 
+    yytext[strlen(yytext)-1]=' ';
+    yylval=atoi(yytext);
+    return NUMBER;}
 [0-9]+ 	{yylval=atoi(yytext);return NUMBER;}
 \n  	{return EOL;}
 [ \t] 	{/*空白忽略*/}
