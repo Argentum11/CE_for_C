@@ -17,3 +17,14 @@ bison -V
 ```
 You should see the following result
 ![image](https://user-images.githubusercontent.com/92793837/220815692-7b47de4e-008e-4019-8b3d-65f6f2f6196c.png)
+
+## How to use
+
+### Calculator
+
+1. Just enter the numbers that you want to calculate (ex: 1+5, 10*399..etc)
+     - Warning: While entering negative numbers, please use parentheses, look at the following example
+     ```
+     9+(-5)
+     1-(-55)
+     ```
