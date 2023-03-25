@@ -1,13 +1,22 @@
 %{
 #include <stdio.h>
 #include <math.h>
+#include <string.h>
+
+#define MAX_VAR_NUM 100
+#define MAX_VAR_NAME_LEN 30
+
 typedef struct {
-  int value;
-  char* name;
-} myVar;
+    char name[MAX_VAR_NAME_LEN];
+    int value;
+} Variable;
+
+Variable variables[MAX_VAR_NUM];
+int var_count = 0;
+
 %}
 
-%token NUMBER VAR
+%token  NUMBER VAR
 %token STORE END PRINT
 %token ADD SUB MUL DIV ABS LOG
 %token EOL
@@ -16,9 +25,39 @@ typedef struct {
 
 
 calclist:
-  |calclist VAR STORE exp END EOL{printf ("store %d\n",$4);}
+  |calclist VAR STORE exp END EOL { 
+          int found = 0,i;
+          for (i = 0; i < var_count; i++) {
+              if (strcmp(variables[i].name, (char*)$2) == 0) {
+                  variables[i].value = $4;
+                  printf("store %s = %d\n", variables[i].name, variables[i].value);
+                  found = 1;
+                  break;
+              }
+          }
+          if (!found) {
+              Variable var;
+              var.value = $4;
+              strcpy(var.name, (char*)$2);
+              variables[var_count++] = var;
+              printf("store %s = %d\n", variables[var_count-1].name, variables[var_count-1].value);
+          }
+      }
   |calclist exp EOL{printf ("=%d\n",$2);}
   |calclist PRINT exp EOL{printf ("%d\n",$3);}
+  |calclist PRINT VAR END EOL{
+          int found = 0,i;
+          for (i = 0; i < var_count; i++) {
+              if (strcmp(variables[i].name, (char*)$3) == 0) {
+                  printf("%d\n", variables[i].value);
+                  found = 1;
+                  break;
+              }
+            }
+          if (!found) {
+              printf("variable %s not found\n", (char*)$3);
+            }
+          }
   ;
   
 exp:factor {$$ = $1;}

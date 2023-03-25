@@ -20,10 +20,9 @@
     yytext[strlen(yytext)-1]=' ';
     yylval=atoi(yytext);
     return NUMBER;}
-[0-9]+ 	{yylval=atoi(yytext);return NUMBER;}
 \n  	{return EOL;}
 [ \t] 	{/*空白忽略*/}
-[_a-zA-Z][_a-zA-z0-9]*	{  return VAR;}
+[_a-zA-Z][_a-zA-z0-9]*	{  yylval=strdup(yytext);return VAR;}
 . 	{printf("Invaild symbol %c\n",*yytext);}
 
 %%
