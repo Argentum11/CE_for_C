@@ -30,6 +30,7 @@ calclist:
           for (i = 0; i < var_count; i++) {
               if (strcmp(variables[i].name, (char*)$2) == 0) {
                   variables[i].value = $4;
+                  printf("store %s = %d\n", variables[i].name, variables[i].value);
                   found = 1;
                   break;
               }
@@ -39,8 +40,8 @@ calclist:
               var.value = $4;
               strcpy(var.name, (char*)$2);
               variables[var_count++] = var;
+              printf("store %s = %d\n", variables[var_count-1].name, variables[var_count-1].value);
           }
-          printf("store %s = %d\n", variables[var_count-1].name, variables[var_count-1].value);
       }
   |calclist exp EOL{printf ("=%d\n",$2);}
   |calclist PRINT exp EOL{printf ("%d\n",$3);}
