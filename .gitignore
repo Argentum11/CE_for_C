@@ -2,3 +2,5 @@ lex.yy.c
 CFE.tab.c
 CFE.tab.h
 a.exe
+.vscode
+.pytest_cache
