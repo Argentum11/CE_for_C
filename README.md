@@ -28,3 +28,6 @@ You should see the following result
      9+(-5)
      1-(-55)
      ```
+     |name|command|output|
+     |-|-|-|
+     |add|1+5|=6|
