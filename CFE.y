@@ -44,7 +44,7 @@ calclist:
           }
       }
   |calclist exp EOL{printf ("=%d\n",$2);}
-  |calclist PRINT exp EOL{printf ("%d\n",$3);}
+  |calclist PRINT exp END EOL{printf ("%d\n",$3);}
   |calclist PRINT VAR END EOL{
           int found = 0,i;
           for (i = 0; i < var_count; i++) {
@@ -72,6 +72,19 @@ factor:term {$$=$1;}
   ;
   
 term:NUMBER {$$=$1;}
+  |VAR { 
+          int found = 0,i;
+          for (i = 0; i < var_count; i++) {
+              if (strcmp(variables[i].name, (char*)$1) == 0) {
+                  $$ = variables[i].value;
+                  found = 1;
+                  break;
+              }
+          }
+          if (!found) {
+              printf("variable %s not found\n", (char*)$1);
+          }
+      }
   |LOG term {$$ = log($2);}
   |ABS exp ABS {$$=$2>=0?$2:-$2;}
   |'(' exp ')' { $$ = $2; }
