@@ -43,7 +43,6 @@ calclist:
               printf("store %s = %d\n", variables[var_count-1].name, variables[var_count-1].value);
           }
       }
-  |calclist exp EOL{printf ("=%d\n",$2);}
   |calclist PRINT exp END EOL{printf ("%d\n",$3);}
   |calclist PRINT VAR END EOL{
           int found = 0,i;
