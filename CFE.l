@@ -5,6 +5,9 @@
 
 %%
 
+"cout"  {return OUTPUT;}
+"<<"    {return OUTPUT_OPERATOR;}
+"endl"  {return NEWLINE;}
 "+"   	{return ADD;}
 "-"   	{return SUB;}
 "*"   	{return MUL;}
