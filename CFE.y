@@ -44,19 +44,6 @@ calclist:
           }
       }
   |calclist PRINT exp END EOL{printf ("%d\n",$3);}
-  |calclist PRINT VAR END EOL{
-          int found = 0,i;
-          for (i = 0; i < var_count; i++) {
-              if (strcmp(variables[i].name, (char*)$3) == 0) {
-                  printf("%d\n", variables[i].value);
-                  found = 1;
-                  break;
-              }
-            }
-          if (!found) {
-              printf("variable %s not found\n", (char*)$3);
-            }
-          }
   ;
   
 exp:factor {$$ = $1;}
