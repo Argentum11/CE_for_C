@@ -66,7 +66,9 @@ def case_end(command, expected_output):
         end = f'<<{ENDL}'
     end = f'{end}{SEMICOLON}'
     command = f'{command}{end}'
-    case = Case(command, expected_output, newLine)
+    case = Case(command, expected_output)
+    if newLine==False:
+        case.expected_output = delete_newline(case.expected_output)
     return case
 
 def output_variable(variable_name, variable_value):

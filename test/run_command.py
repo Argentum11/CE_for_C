@@ -1,12 +1,9 @@
 import random
 
 class Case:
-  def __init__(self, command, expected_output, output_newline=True):
+  def __init__(self, command, expected_output):
     self.command = f'{command}\n'
-    if output_newline:
-       self.expected_output = f'{expected_output}\n'
-    else:
-       self.expected_output = expected_output
+    self.expected_output = f'{expected_output}\n'
 
 def run_command(case:Case):
   import subprocess
