@@ -5,7 +5,7 @@
 
 #define MAX_VAR_NUM 100
 #define MAX_VAR_NAME_LEN 30
-
+double variables[256];
 typedef struct {
     char name[MAX_VAR_NAME_LEN];
     int value;
@@ -15,12 +15,26 @@ Variable variables[MAX_VAR_NUM];
 int var_count = 0;
 
 %}
+%union {
+    double dval;
+    char sval;
+    int a;
+}
 
 %token  NUMBER VAR
 %token STORE END PRINT
 %token ADD SUB MUL DIV ABS LOG
 %token EOL
-
+%token POW
+%token SQRT
+%token COS SIN TAN
+%token MOD
+%token COMMA
+%token IF
+%left '-' '+'
+%left '*' '/' '^'
+%type <dval> exp factor term
+%token <dval> NUMBERS
 %%
 
 
@@ -63,18 +77,25 @@ calclist:
 exp:factor {$$ = $1;}
   |exp ADD factor{$$=$1+$3;}
   |exp SUB factor{$$=$1-$3;}
+  |exp POW factor { $$ = pow($1, $3); }
   |SUB factor{$$=-$2;}
   ;
 
 factor:term {$$=$1;}
   |factor MUL term{$$=$1*$3;}
   |factor DIV term{$$=$1/$3;}
+  |factor MOD term { $$ = fmod($1, $3); }
   ;
   
-term:NUMBER {$$=$1;}
-  |LOG term {$$ = log($2);}
+term:NUMBER {$$=$1;} 
+  |LOG term { $$ = log10($2); }
   |ABS exp ABS {$$=$2>=0?$2:-$2;}
+  | SQRT '(' exp ')' { $$ = sqrt($3); } 
+  | COS '(' exp ')' { $$ = cos($3); } 
+  | SIN '(' exp ')' { $$ = sin($3); } 
+  | TAN '(' exp ')' { $$ = tan($3); }
   |'(' exp ')' { $$ = $2; }
+  | VAR { $$ = variables[$1]; }
   ;
 %%
 

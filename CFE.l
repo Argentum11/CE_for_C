@@ -2,7 +2,13 @@
 #include "CFE.tab.h"
 #include <string.h>
 %}
-
+digit       [0-9]+
+if          "if"
+else        "else"
+cleft       "{"
+cright      "}"
+rleft       "("
+rright      ")"
 %%
 
 "+"   	{return ADD;}
@@ -11,8 +17,14 @@
 "/"   	{return DIV;}
 "|"   	{return ABS;}
 "="     {return STORE;}
+"^"     {return POW;}
 ";"     {return END;}
 "log"   {return LOG;}
+"sqrt"  {return SQRT;}
+"cos"   {return COS;}
+"sin"   {return SIN;}
+"tan"   {return TAN;}
+"%"     {return MOD;}
 "print" {return PRINT;}
 [()]    {return yytext[0]; }
 [0-9]+ 	{yylval = atoi(yytext);return NUMBER;}
