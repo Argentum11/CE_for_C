@@ -11,12 +11,10 @@ variable_type_list = [INT]
 
 NEW_VAR = 6
 VAR_REASSIGNMENT = 7
-PRINT_VAR = 8
-action_list = [NEW_VAR, VAR_REASSIGNMENT, PRINT_VAR]
+OUTPUT_VAR = 8
+action_list = [NEW_VAR, VAR_REASSIGNMENT, OUTPUT_VAR]
 
 VAR_MAX_LENGTH = 9
-ASSIGN = "="
-EXPRESSION_END = ";"
 
 class Variable:
     def __init__(self, name, type, value):
@@ -55,13 +53,13 @@ def generate_variable_value(type):
     return value
 
 def variable_declaration(variable_name, variable_value):
-    command = variable_name + ASSIGN + str(adjust_number_for_command(variable_value)) + EXPRESSION_END
-    expected_output = "store " + variable_name + " = "+ str(variable_value)
+    command = f'{variable_name}{ASSIGN}{adjust_number_for_command(variable_value)}{SEMICOLON}'
+    expected_output = f'store {variable_name} = {variable_value}'
     case = Case(command, expected_output)
     return case
 
-def print_variable(variable_name, variable_value):
-    command = "print " + str(variable_name) + ";"
+def output_variable(variable_name, variable_value):
+    command = f'{COUT}<<{variable_name}<<{ENDL}{SEMICOLON}'
     expected_output = variable_value
     case = Case(command, expected_output)
     return case
@@ -86,19 +84,20 @@ def test_variable():
             new_variable = Variable(name, type, value)
             variable_list.append(new_variable)
             case_list.append(variable_declaration(new_variable.name, new_variable.value))
-            case_list.append(print_variable(new_variable.name, new_variable.value))
+            case_list.append(output_variable(new_variable.name, new_variable.value))
         elif action == VAR_REASSIGNMENT:
             existing_variable = random.choice(variable_list)
             new_value = generate_variable_value(existing_variable.type)
             existing_variable.reassign_value(new_value)
             case_list.append(variable_reassignment(existing_variable.name, existing_variable.value))
-            case_list.append(print_variable(existing_variable.name, existing_variable.value))
-        elif action == PRINT_VAR:
-            existing_variable = random.choice(variable_list)
-            case_list.append(print_variable(existing_variable.name, existing_variable.value))
+            case_list.append(output_variable(existing_variable.name, existing_variable.value))
+        elif action == OUTPUT_VAR:
+            existing_variable:Variable = random.choice(variable_list)
+            case_list.append(output_variable(existing_variable.name, existing_variable.value))
 
     command = ""
     expected_output = ""
+    current_case:Case
     for current_case in case_list:
         command = command + current_case.command
         expected_output = expected_output + current_case.expected_output

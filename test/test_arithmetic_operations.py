@@ -3,6 +3,7 @@ import random
 
 POSITIVE = 1
 NEGATIVE = -1
+
 def get_random_integers(sign):
     integer = random.randint(0, 100) * sign
     return integer
@@ -11,14 +12,14 @@ combination={(POSITIVE, POSITIVE), (POSITIVE, NEGATIVE), (NEGATIVE, POSITIVE), (
 
 #######################################################################
 def create_add_command(augend, addend):
-    augend = adjust_number_for_command(augend)
-    addend = adjust_number_for_command(addend)
-    command = str(augend)+ "+" + str(addend)
+    augend:str = adjust_number_for_command(augend)
+    addend:str = adjust_number_for_command(addend)
+    command = f'{VAR}{ASSIGN}{augend}+{addend}{SEMICOLON}'
     return command
 
 def addition(augend, addend):
     total = augend + addend
-    expected_output = add_equal_sign(total)
+    expected_output = f'{STORE} {VAR} {EQUAL} {total}'
     command = create_add_command(augend, addend)
     case = Case(command, expected_output)
     assert case.expected_output == run_command(case)
@@ -35,12 +36,12 @@ def test_addition():
 def create_subtract_command(minuend, subtrahend):
     minuend = adjust_number_for_command(minuend)
     subtrahend = adjust_number_for_command(subtrahend)
-    command = str(minuend)+ "-" + str(subtrahend)
+    command = f'{VAR}{ASSIGN}{minuend}-{subtrahend}{SEMICOLON}'
     return command
 
 def subtraction(minuend, subtrahend):
     difference = minuend - subtrahend
-    expected_output = add_equal_sign(difference)
+    expected_output = f'{STORE} {VAR} {EQUAL} {difference}'
     command = create_subtract_command(minuend, subtrahend)
     case = Case(command, expected_output)
     assert case.expected_output == run_command(case)
@@ -57,12 +58,12 @@ def test_subtraction():
 def create_multiply_command(multiplicand, multiplier):
     multiplicand = adjust_number_for_command(multiplicand)
     multiplier = adjust_number_for_command(multiplier)
-    command = str(multiplicand)+ "*" + str(multiplier)
+    command = f'{VAR}{ASSIGN}{multiplicand}*{multiplier}{SEMICOLON}'
     return command
 
 def multiplication(multiplicand, multiplier):
     product = multiplicand * multiplier
-    expected_output = add_equal_sign(product)
+    expected_output = f'{STORE} {VAR} {EQUAL} {product}'
     command = create_multiply_command(multiplicand, multiplier)
     case = Case(command, expected_output)
     assert case.expected_output == run_command(case)
@@ -79,12 +80,12 @@ def test_multiplication():
 def create_divide_command(dividend, divisor):
     dividend = adjust_number_for_command(dividend)
     divisor = adjust_number_for_command(divisor)
-    command = str(dividend)+ "/" + str(divisor)
+    command = f'{VAR}{ASSIGN}{dividend}/{divisor}{SEMICOLON}'
     return command
 
 def division(dividend, divisor):
     quotient = int(dividend / divisor)
-    expected_output = add_equal_sign(quotient)
+    expected_output = f'{STORE} {VAR} {EQUAL} {quotient}'
     command = create_divide_command(dividend, divisor)
     case = Case(command, expected_output)
     assert case.expected_output == run_command(case)
@@ -100,18 +101,19 @@ def test_division():
 #######################################################################
 def create_parenthesis_command(num_1, num_2, num_3):
     # num_1*(num_2+num_3)
-    command = str(num_1) + "*(" + str(num_2) + "+" + str(num_3)+ ")"
+    command = f'{VAR}{ASSIGN}{num_1}*({num_2}+{num_3}){SEMICOLON}'
     return command
 
 def parenthesis(num_1, num_2, num_3):
     command = create_parenthesis_command(num_1, num_2, num_3)
-    expected_output = add_equal_sign( num_1 * (num_2+num_3) )
+    expected_output = f'{STORE} {VAR} {EQUAL} { (num_1*(num_2+num_3)) }'
     case = Case(command, expected_output)
     assert case.expected_output == run_command(case)
 
 def test_parenthesis():
-    num_1 = get_random_integers(POSITIVE)
-    num_2 = get_random_integers(POSITIVE)
-    num_3 = get_random_integers(POSITIVE)
-    parenthesis(num_1, num_2, num_3)
+    for i in range(5):
+        num_1 = get_random_integers(POSITIVE)
+        num_2 = get_random_integers(POSITIVE)
+        num_3 = get_random_integers(POSITIVE)
+        parenthesis(num_1, num_2, num_3)
     

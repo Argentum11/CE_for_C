@@ -1,7 +1,7 @@
 class Case:
   def __init__(self, command, expected_output):
-    self.command = command + "\n"
-    self.expected_output = str(expected_output) + "\n"
+    self.command = f'{command}\n'
+    self.expected_output = f'{expected_output}\n'
 
 def run_command(case):
   import subprocess
@@ -19,15 +19,11 @@ def run_command(case):
       output = my_file.read()
   return output
 
-def add_equal_sign(number):
-    result = "=" + str(number)
-    return result
-
 def adjust_number_for_command(number):
     if(number < 0):
-        result = "(" + str(number) + ")"
+        result = f'({number})'
     else:
-        result = number
+        result = str(number)
     return result
 
 #delete additional \n at the end
@@ -36,3 +32,12 @@ def fix_case_for_multiple_command(case:Case):
    case.command = case.command[:command_final_index]
    expected_output_final_index = len(case.expected_output)-1
    case.expected_output = case.expected_output[:expected_output_final_index]
+
+# Global constants
+VAR = "a1"
+ASSIGN = "="
+EQUAL = "="
+SEMICOLON = ";"
+STORE = "store"
+COUT = "cout"
+ENDL = "endl"
