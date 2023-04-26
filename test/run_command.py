@@ -1,9 +1,14 @@
-class Case:
-  def __init__(self, command, expected_output):
-    self.command = f'{command}\n'
-    self.expected_output = f'{expected_output}\n'
+import random
 
-def run_command(case):
+class Case:
+  def __init__(self, command, expected_output, output_newline=True):
+    self.command = f'{command}\n'
+    if output_newline:
+       self.expected_output = f'{expected_output}\n'
+    else:
+       self.expected_output = expected_output
+
+def run_command(case:Case):
   import subprocess
   command =case.command
   with open("input.txt",'w') as my_file:
@@ -27,11 +32,16 @@ def adjust_number_for_command(number):
     return result
 
 #delete additional \n at the end
-def fix_case_for_multiple_command(case:Case):
-   command_final_index = len(case.command)-1
-   case.command = case.command[:command_final_index]
-   expected_output_final_index = len(case.expected_output)-1
-   case.expected_output = case.expected_output[:expected_output_final_index]
+def delete_newline(text):
+    final_index = len(text)-1
+    return text[:final_index]
+
+def delete_newline_for_case(case:Case):
+   case.command = delete_newline(case.command)
+   case.expected_output = delete_newline(case.expected_output)
+
+def truth_or_false():
+   return random.choice([True, False])
 
 # Global constants
 VAR = "a1"

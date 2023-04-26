@@ -12,7 +12,8 @@ variable_type_list = [INT]
 NEW_VAR = 6
 VAR_REASSIGNMENT = 7
 OUTPUT_VAR = 8
-action_list = [NEW_VAR, VAR_REASSIGNMENT, OUTPUT_VAR]
+OUTPUT_MULTIPLE_VAR = 9
+action_list = [NEW_VAR, VAR_REASSIGNMENT, OUTPUT_VAR, OUTPUT_MULTIPLE_VAR]
 
 VAR_MAX_LENGTH = 9
 
@@ -58,11 +59,32 @@ def variable_declaration(variable_name, variable_value):
     case = Case(command, expected_output)
     return case
 
-def output_variable(variable_name, variable_value):
-    command = f'{COUT}<<{variable_name}<<{ENDL}{SEMICOLON}'
-    expected_output = variable_value
-    case = Case(command, expected_output)
+def case_end(command, expected_output):
+    newLine= truth_or_false()
+    end = ""
+    if newLine:
+        end = f'<<{ENDL}'
+    end = f'{end}{SEMICOLON}'
+    command = f'{command}{end}'
+    case = Case(command, expected_output, newLine)
     return case
+
+def output_variable(variable_name, variable_value):
+    command = f'{COUT}<<{variable_name}'
+    expected_output = variable_value
+    return case_end(command, expected_output)
+
+def output_multiple_variables(selected_variables:list):
+    variable_name_concatenation = ""
+    variable_value_concatenation = ""
+    variable:Variable
+    if len(selected_variables)>0:
+        for variable in selected_variables:
+            variable_name_concatenation = f'{variable_name_concatenation}<<{variable.name}'
+            variable_value_concatenation = f'{variable_value_concatenation}{variable.value}'
+    command = f'{COUT}{variable_name_concatenation}'
+    expected_output = variable_value_concatenation
+    return case_end(command, expected_output)
 
 def variable_reassignment(variable_name, variable_value):
     return variable_declaration(variable_name, variable_value)
@@ -77,6 +99,7 @@ def test_variable():
         else:
             action = random.choice(action_list)
 
+        print(action)
         if action == NEW_VAR:
             name = generate_variable_name()
             type = random.choice(variable_type_list)
@@ -94,13 +117,20 @@ def test_variable():
         elif action == OUTPUT_VAR:
             existing_variable:Variable = random.choice(variable_list)
             case_list.append(output_variable(existing_variable.name, existing_variable.value))
-
+        elif action == OUTPUT_MULTIPLE_VAR:
+            output_var_list = []
+            for var in variable_list:
+                if truth_or_false():
+                    output_var_list.append(var)
+            if len(output_var_list)==0:
+                output_var_list.append(variable_list[0])
+            case_list.append(output_multiple_variables(output_var_list))
     command = ""
     expected_output = ""
     current_case:Case
     for current_case in case_list:
-        command = command + current_case.command
-        expected_output = expected_output + current_case.expected_output
+        command = f'{command}{current_case.command}'
+        expected_output = f'{expected_output}{current_case.expected_output}'
     total_case = Case(command, expected_output)
-    fix_case_for_multiple_command(total_case)
+    delete_newline_for_case(total_case)
     assert total_case.expected_output == run_command(total_case)
