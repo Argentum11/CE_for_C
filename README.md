@@ -35,22 +35,6 @@ You should see the following result
 
      Solution: Move your bison path (C:\GnuWin32\bin) to the top of the environment path variable list
 
-## How to use
-
-### Calculator
-
-1. Just enter the numbers that you want to calculate (ex: 1+5, 10*399..etc)
-     * Warning: While entering negative numbers, please use parentheses, look at the following example
-
-     ```bash
-     9+(-5)
-     1-(-55)
-     ```
-
-     |name|command|output|
-     |-|-|-|
-     |add|1+5|=6|
-
 ## Division of work
 
 |name|work|
