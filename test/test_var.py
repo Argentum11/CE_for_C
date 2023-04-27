@@ -12,8 +12,7 @@ variable_type_list = [INT]
 NEW_VAR = 6
 VAR_REASSIGNMENT = 7
 OUTPUT_VAR = 8
-OUTPUT_MULTIPLE_VAR = 9
-action_list = [NEW_VAR, VAR_REASSIGNMENT, OUTPUT_VAR, OUTPUT_MULTIPLE_VAR]
+action_list = [NEW_VAR, VAR_REASSIGNMENT, OUTPUT_VAR]
 
 VAR_MAX_LENGTH = 9
 
@@ -117,15 +116,12 @@ def test_variable():
             case_list.append(variable_reassignment(existing_variable.name, existing_variable.value))
             case_list.append(output_variable(existing_variable.name, existing_variable.value))
         elif action == OUTPUT_VAR:
-            existing_variable:Variable = random.choice(variable_list)
-            case_list.append(output_variable(existing_variable.name, existing_variable.value))
-        elif action == OUTPUT_MULTIPLE_VAR:
             output_var_list = []
             for var in variable_list:
                 if truth_or_false():
                     output_var_list.append(var)
             if len(output_var_list)==0:
-                output_var_list.append(variable_list[0])
+                output_var_list.append(random.choice(variable_list))
             case_list.append(output_multiple_variables(output_var_list))
     command = ""
     expected_output = ""
