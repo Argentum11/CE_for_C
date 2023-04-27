@@ -8,7 +8,7 @@ def get_random_integers(sign):
     integer = random.randint(0, 100) * sign
     return integer
 
-combination={(POSITIVE, POSITIVE), (POSITIVE, NEGATIVE), (NEGATIVE, POSITIVE), (NEGATIVE, NEGATIVE)}
+number_combination={(POSITIVE, POSITIVE), (POSITIVE, NEGATIVE), (NEGATIVE, POSITIVE), (NEGATIVE, NEGATIVE)}
 
 #######################################################################
 def create_add_command(augend, addend):
@@ -25,7 +25,7 @@ def addition(augend, addend):
     assert case.expected_output == run_command(case)
 
 def test_addition():
-    for x in combination:
+    for x in number_combination:
         augend_sign = x[0]
         addend_sign = x[1]
         augend = get_random_integers(augend_sign)
@@ -47,7 +47,7 @@ def subtraction(minuend, subtrahend):
     assert case.expected_output == run_command(case)
 
 def test_subtraction():
-    for x in combination:
+    for x in number_combination:
         augend_sign = x[0]
         subtrahend_sign = x[1]
         minuend = get_random_integers(augend_sign)
@@ -69,7 +69,7 @@ def multiplication(multiplicand, multiplier):
     assert case.expected_output == run_command(case)
 
 def test_multiplication():
-    for x in combination:
+    for x in number_combination:
         multiplicand_sign = x[0]
         multiplier_sign = x[1]
         minuend = get_random_integers(multiplicand_sign)
@@ -91,11 +91,13 @@ def division(dividend, divisor):
     assert case.expected_output == run_command(case)
 
 def test_division():
-    for x in combination:
+    for x in number_combination:
         dividend_sign = x[0]
         divisor_sign = x[1]
         dividend = get_random_integers(dividend_sign)
-        divisor = get_random_integers(divisor_sign)
+        divisor = 0
+        while divisor==0:
+            divisor = get_random_integers(divisor_sign)
         division(dividend, divisor)
 
 #######################################################################
@@ -116,4 +118,3 @@ def test_parenthesis():
         num_2 = get_random_integers(POSITIVE)
         num_3 = get_random_integers(POSITIVE)
         parenthesis(num_1, num_2, num_3)
-    

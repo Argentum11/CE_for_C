@@ -12,6 +12,7 @@ variable_type_list = [INT]
 NEW_VAR = 6
 VAR_REASSIGNMENT = 7
 OUTPUT_VAR = 8
+VAR_MATH = 9
 action_list = [NEW_VAR, VAR_REASSIGNMENT, OUTPUT_VAR]
 
 VAR_MAX_LENGTH = 9
@@ -23,6 +24,8 @@ class Variable:
         self.value = value
     def reassign_value(self, value):
         self.value = value
+
+variable_list = []
 
 def generate_letter():
     random_letter = random.choice(string.ascii_letters)
@@ -52,9 +55,16 @@ def generate_variable_value(type):
         value = random.randint(-1000, 1000)
     return value
 
-def variable_declaration(variable_name, variable_value):
-    command = f'{variable_name}{ASSIGN}{adjust_number_for_command(variable_value)}{SEMICOLON}'
-    expected_output = f'store {variable_name} = {variable_value}'
+def generate_variable():
+    name = generate_variable_name()
+    type = random.choice(variable_type_list)
+    value = generate_variable_value(type)
+    variable = Variable(name, type, value)
+    return variable
+
+def variable_declaration(variable:Variable):
+    command = f'{variable.name}{ASSIGN}{adjust_number_for_command(variable.value)}{SEMICOLON}'
+    expected_output = f'store {variable.name} = {variable.value}'
     case = Case(command, expected_output)
     return case
 
@@ -70,9 +80,9 @@ def case_end(command, expected_output):
         case.expected_output = delete_newline(case.expected_output)
     return case
 
-def output_variable(variable_name, variable_value):
-    command = f'{COUT}<<{variable_name}'
-    expected_output = variable_value
+def output_variable(variable:Variable):
+    command = f'{COUT}<<{variable.name}'
+    expected_output = variable.value
     return case_end(command, expected_output)
 
 def output_multiple_variables(selected_variables:list):
@@ -87,11 +97,12 @@ def output_multiple_variables(selected_variables:list):
     expected_output = variable_value_concatenation
     return case_end(command, expected_output)
 
-def variable_reassignment(variable_name, variable_value):
-    return variable_declaration(variable_name, variable_value)
+def variable_reassignment(variable:Variable):
+    new_value = generate_variable_value(variable.type)
+    variable.reassign_value(new_value)
+    return variable_declaration(variable)
     
-def test_variable():
-    variable_list = []
+def test_variable_assignment():
     case_list = []
     for i in range(0, 10):
         action = -1
@@ -102,19 +113,14 @@ def test_variable():
 
         print(action)
         if action == NEW_VAR:
-            name = generate_variable_name()
-            type = random.choice(variable_type_list)
-            value = generate_variable_value(type)
-            new_variable = Variable(name, type, value)
+            new_variable = generate_variable()
             variable_list.append(new_variable)
-            case_list.append(variable_declaration(new_variable.name, new_variable.value))
-            case_list.append(output_variable(new_variable.name, new_variable.value))
+            case_list.append(variable_declaration(new_variable))
+            case_list.append(output_variable(new_variable))
         elif action == VAR_REASSIGNMENT:
-            existing_variable = random.choice(variable_list)
-            new_value = generate_variable_value(existing_variable.type)
-            existing_variable.reassign_value(new_value)
-            case_list.append(variable_reassignment(existing_variable.name, existing_variable.value))
-            case_list.append(output_variable(existing_variable.name, existing_variable.value))
+            existing_variable:Variable = random.choice(variable_list)
+            case_list.append(variable_reassignment(existing_variable))
+            case_list.append(output_variable(existing_variable))
         elif action == OUTPUT_VAR:
             output_var_list = []
             for var in variable_list:
@@ -132,3 +138,115 @@ def test_variable():
     total_case = Case(command, expected_output)
     delete_newline_for_case(total_case)
     assert total_case.expected_output == run_command(total_case)
+
+VARIABLE = 10
+operand_list = [NUMBER, VARIABLE]
+operand_combination = {(NUMBER, VARIABLE), (VARIABLE, NUMBER), (VARIABLE, VARIABLE)}
+
+def generate_five_variables():
+    for i in range(5):
+        new_variable:Variable = generate_variable()
+        variable_list.append(new_variable)
+
+def get_operand(type:int):
+    if type==VARIABLE:
+        return random.choice(variable_list)
+    else:
+        return random.randint(-1000, 1000)
+    
+def operand_decoder(operand1, operand2):
+    name1 = ""
+    value1 = 0
+    if isinstance(operand1, Variable):
+        name1 = operand1.name
+        value1 = operand1.value
+    else:
+        name1 = adjust_number_for_command(operand1)
+        value1 = operand1
+    name2 = ""
+    value2 = 0
+    if isinstance(operand2, Variable):
+        name2 = operand2.name
+        value2 = operand2.value
+    else:
+        name2 = adjust_number_for_command(operand2)
+        value2 = operand2
+    return name1, name2, value1, value2
+
+#######################################################################
+def prepare_variable():
+    variable_list.clear()
+    generate_five_variables()
+    command = ""
+    expected_output = ""
+    var:Variable
+    for var in variable_list:
+        command = f'{command}{var.name}{ASSIGN}{adjust_number_for_command(var.value)}{SEMICOLON}{NEWLINE}'
+        expected_output = f'{expected_output}store {var.name} = {var.value}{NEWLINE}'
+    prepared_case = Case(command, expected_output)
+    delete_newline_for_case(prepared_case)
+    return prepared_case
+
+#######################################################################
+def variable_add(previous_case:Case, operand1, operand2):
+    name1, name2, value1, value2 = operand_decoder(operand1, operand2)
+    sum = value1 + value2
+    command = f'{previous_case.command}{VAR}{ASSIGN}{name1}+{name2}{SEMICOLON}'
+    expected_output = f'{previous_case.expected_output}store {VAR} = {sum}'
+    case = Case(command, expected_output)
+    assert case.expected_output == run_command(case)
+
+def test_variable_add():
+    prepared_case:Case = prepare_variable() 
+    for operand_pair in operand_combination:
+        operand1 = get_operand(operand_pair[0])
+        operand2 = get_operand(operand_pair[1])
+        variable_add(prepared_case, operand1, operand2)
+
+#######################################################################
+def variable_subtraction(previous_case:Case, operand1, operand2):
+    name1, name2, value1, value2 = operand_decoder(operand1, operand2)
+    sum = value1 - value2
+    command = f'{previous_case.command}{VAR}{ASSIGN}{name1}-{name2}{SEMICOLON}'
+    expected_output = f'{previous_case.expected_output}store {VAR} = {sum}'
+    case = Case(command, expected_output)
+    assert case.expected_output == run_command(case)
+
+def test_variable_subtraction():
+    prepared_case:Case = prepare_variable() 
+    for operand_pair in operand_combination:
+        operand1 = get_operand(operand_pair[0])
+        operand2 = get_operand(operand_pair[1])
+        variable_subtraction(prepared_case, operand1, operand2)
+
+#######################################################################
+def variable_multiplication(previous_case:Case, operand1, operand2):
+    name1, name2, value1, value2 = operand_decoder(operand1, operand2)
+    sum = value1 * value2
+    command = f'{previous_case.command}{VAR}{ASSIGN}{name1}*{name2}{SEMICOLON}'
+    expected_output = f'{previous_case.expected_output}store {VAR} = {sum}'
+    case = Case(command, expected_output)
+    assert case.expected_output == run_command(case)
+
+def test_variable_multiplication():
+    prepared_case:Case = prepare_variable() 
+    for operand_pair in operand_combination:
+        operand1 = get_operand(operand_pair[0])
+        operand2 = get_operand(operand_pair[1])
+        variable_multiplication(prepared_case, operand1, operand2)
+
+#######################################################################
+def variable_division(previous_case:Case, operand1, operand2):
+    name1, name2, value1, value2 = operand_decoder(operand1, operand2)
+    sum = int(value1 / value2)
+    command = f'{previous_case.command}{VAR}{ASSIGN}{name1}/{name2}{SEMICOLON}'
+    expected_output = f'{previous_case.expected_output}store {VAR} = {sum}'
+    case = Case(command, expected_output)
+    assert case.expected_output == run_command(case)
+
+def test_variable_division():
+    prepared_case:Case = prepare_variable() 
+    for operand_pair in operand_combination:
+        operand1 = get_operand(operand_pair[0])
+        operand2 = get_operand(operand_pair[1])
+        variable_division(prepared_case, operand1, operand2)
