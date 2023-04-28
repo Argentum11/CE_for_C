@@ -154,24 +154,16 @@ def get_operand(type:int):
     else:
         return random.randint(-1000, 1000)
     
-def operand_decoder(operand1, operand2):
-    name1 = ""
-    value1 = 0
-    if isinstance(operand1, Variable):
-        name1 = operand1.name
-        value1 = operand1.value
+def operand_decoder(operand):
+    name = ""
+    value = 0
+    if isinstance(operand, Variable):
+        name = operand.name
+        value = operand.value
     else:
-        name1 = adjust_number_for_command(operand1)
-        value1 = operand1
-    name2 = ""
-    value2 = 0
-    if isinstance(operand2, Variable):
-        name2 = operand2.name
-        value2 = operand2.value
-    else:
-        name2 = adjust_number_for_command(operand2)
-        value2 = operand2
-    return name1, name2, value1, value2
+        name = adjust_number_for_command(operand)
+        value = operand
+    return name, value
 
 #######################################################################
 def prepare_variable():
@@ -189,7 +181,8 @@ def prepare_variable():
 
 #######################################################################
 def variable_add(previous_case:Case, operand1, operand2):
-    name1, name2, value1, value2 = operand_decoder(operand1, operand2)
+    name1, value1  = operand_decoder(operand1)
+    name2, value2  = operand_decoder(operand2)
     sum = value1 + value2
     command = f'{previous_case.command}{VAR}{ASSIGN}{name1}+{name2}{SEMICOLON}'
     expected_output = f'{previous_case.expected_output}store {VAR} = {sum}'
@@ -205,10 +198,11 @@ def test_variable_add():
 
 #######################################################################
 def variable_subtraction(previous_case:Case, operand1, operand2):
-    name1, name2, value1, value2 = operand_decoder(operand1, operand2)
-    sum = value1 - value2
+    name1, value1  = operand_decoder(operand1)
+    name2, value2  = operand_decoder(operand2)
+    difference = value1 - value2
     command = f'{previous_case.command}{VAR}{ASSIGN}{name1}-{name2}{SEMICOLON}'
-    expected_output = f'{previous_case.expected_output}store {VAR} = {sum}'
+    expected_output = f'{previous_case.expected_output}store {VAR} = {difference}'
     case = Case(command, expected_output)
     assert case.expected_output == run_command(case)
 
@@ -221,10 +215,11 @@ def test_variable_subtraction():
 
 #######################################################################
 def variable_multiplication(previous_case:Case, operand1, operand2):
-    name1, name2, value1, value2 = operand_decoder(operand1, operand2)
-    sum = value1 * value2
+    name1, value1  = operand_decoder(operand1)
+    name2, value2  = operand_decoder(operand2)
+    product = value1 * value2
     command = f'{previous_case.command}{VAR}{ASSIGN}{name1}*{name2}{SEMICOLON}'
-    expected_output = f'{previous_case.expected_output}store {VAR} = {sum}'
+    expected_output = f'{previous_case.expected_output}store {VAR} = {product}'
     case = Case(command, expected_output)
     assert case.expected_output == run_command(case)
 
@@ -237,10 +232,11 @@ def test_variable_multiplication():
 
 #######################################################################
 def variable_division(previous_case:Case, operand1, operand2):
-    name1, name2, value1, value2 = operand_decoder(operand1, operand2)
-    sum = int(value1 / value2)
+    name1, value1  = operand_decoder(operand1)
+    name2, value2  = operand_decoder(operand2)
+    quotient = int(value1 / value2)
     command = f'{previous_case.command}{VAR}{ASSIGN}{name1}/{name2}{SEMICOLON}'
-    expected_output = f'{previous_case.expected_output}store {VAR} = {sum}'
+    expected_output = f'{previous_case.expected_output}store {VAR} = {quotient}'
     case = Case(command, expected_output)
     assert case.expected_output == run_command(case)
 
@@ -250,3 +246,22 @@ def test_variable_division():
         operand1 = get_operand(operand_pair[0])
         operand2 = get_operand(operand_pair[1])
         variable_division(prepared_case, operand1, operand2)
+
+#######################################################################
+def variable_parenthesis(previous_case:Case, operand1, operand2, operand3):
+    name1, value1  = operand_decoder(operand1)
+    name2, value2  = operand_decoder(operand2)
+    name3, value3  = operand_decoder(operand3)
+    result = value1 * (value2 + value3)
+    command = f'{previous_case.command}{VAR}{ASSIGN}{name1}*({name2}+{name3}){SEMICOLON}'
+    expected_output = f'{previous_case.expected_output}store {VAR} = {result}'
+    case = Case(command, expected_output)
+    assert case.expected_output == run_command(case)
+
+def test_variable_division():
+    prepared_case:Case = prepare_variable() 
+    for operand_pair in operand_combination:
+        operand1 = get_operand(operand_pair[0])
+        operand2 = get_operand(operand_pair[1])
+        operand3 = get_operand(operand_pair[0])
+        variable_parenthesis(prepared_case, operand1, operand2, operand3)
