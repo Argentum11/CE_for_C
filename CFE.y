@@ -16,10 +16,10 @@ int var_count = 0;
 
 %}
 
-%token  NUMBER VAR
+%token  NUMBER VAR STRING
 %token STORE END PRINT
 %token ADD SUB MUL DIV ABS LOG
-%token EOL
+%token OUTPUT OUTPUT_OPERATOR NEWLINE EOL 
 
 %%
 
@@ -43,23 +43,15 @@ calclist:
               printf("store %s = %d\n", variables[var_count-1].name, variables[var_count-1].value);
           }
       }
-  |calclist exp EOL{printf ("=%d\n",$2);}
-  |calclist PRINT exp EOL{printf ("%d\n",$3);}
-  |calclist PRINT VAR END EOL{
-          int found = 0,i;
-          for (i = 0; i < var_count; i++) {
-              if (strcmp(variables[i].name, (char*)$3) == 0) {
-                  printf("%d\n", variables[i].value);
-                  found = 1;
-                  break;
-              }
-            }
-          if (!found) {
-              printf("variable %s not found\n", (char*)$3);
-            }
-          }
+  |calclist OUTPUT output_item END EOL{}
   ;
-  
+
+output_item:OUTPUT_OPERATOR exp{printf ("%d",$2);}
+  |OUTPUT_OPERATOR NEWLINE{printf ("\n");}
+  |output_item OUTPUT_OPERATOR exp{printf ("%d",$3);}
+  |output_item OUTPUT_OPERATOR NEWLINE{printf ("\n");}
+  ;
+
 exp:factor {$$ = $1;}
   |exp ADD factor{$$=$1+$3;}
   |exp SUB factor{$$=$1-$3;}
@@ -72,6 +64,19 @@ factor:term {$$=$1;}
   ;
   
 term:NUMBER {$$=$1;}
+  |VAR { 
+          int found = 0,i;
+          for (i = 0; i < var_count; i++) {
+              if (strcmp(variables[i].name, (char*)$1) == 0) {
+                  $$ = variables[i].value;
+                  found = 1;
+                  break;
+              }
+          }
+          if (!found) {
+              printf("variable %s not found\n", (char*)$1);
+          }
+      }
   |LOG term {$$ = log($2);}
   |ABS exp ABS {$$=$2>=0?$2:-$2;}
   |'(' exp ')' { $$ = $2; }
