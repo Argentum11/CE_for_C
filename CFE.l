@@ -18,7 +18,6 @@
 "log"   {return LOG;}
 "print" {return PRINT;}
 [()]    {return yytext[0]; }
-\n  	{return EOL;}
 [0-9]+ 	{yylval = atoi(yytext);return NUMBER;}
 \"[ _a-zA-z0-9\t\"\']*\" 	{
     yytext[strlen(yytext)-1]='\0';
