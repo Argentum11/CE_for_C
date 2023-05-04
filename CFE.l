@@ -70,6 +70,8 @@
     yylval=atoi(yytext);
     return NUMBER;}
 [_a-zA-Z][_a-zA-z0-9]*	{  yylval=strdup(yytext);return VAR;}
+\n  	{return EOL;}
+[ \t] 	{/*空白忽略*/}
 . 	{printf("Invaild symbol %c\n",*yytext);}
 
 %%
