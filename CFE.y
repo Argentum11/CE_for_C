@@ -47,8 +47,10 @@ calclist:
   ;
 
 output_item:OUTPUT_OPERATOR exp{printf ("%d",$2);}
+  |OUTPUT_OPERATOR STRING{printf ("%s",$2);}
   |OUTPUT_OPERATOR NEWLINE{printf ("\n");}
   |output_item OUTPUT_OPERATOR exp{printf ("%d",$3);}
+  |output_item OUTPUT_OPERATOR STRING{printf ("%s",$3);}
   |output_item OUTPUT_OPERATOR NEWLINE{printf ("\n");}
   ;
 
@@ -79,6 +81,7 @@ term:NUMBER {$$=$1;}
       }
   |LOG term {$$ = log($2);}
   |ABS exp ABS {$$=$2>=0?$2:-$2;}
+  |STRING {$$=$1;}
   |'(' exp ')' { $$ = $2; }
   ;
 %%
