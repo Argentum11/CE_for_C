@@ -4,7 +4,7 @@ bison -d CFE.y
 gcc CFE.tab.c lex.yy.c -lfl
 cd test
 pytest -rp --md-report --md-report-color=auto --md-report-tee --md-report-output=report.md
-py format_report.py
+python format_report.py
 del input.txt
 del result.txt
 pause
