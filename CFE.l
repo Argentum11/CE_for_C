@@ -8,6 +8,8 @@
 "cout"  {return OUTPUT;}
 "<<"    {return OUTPUT_OPERATOR;}
 "endl"  {return NEWLINE;}
+"int"   {return TYPE_INT;}
+"string"    {return TYPE_STRING;}
 "+"   	{return ADD;}
 "-"   	{return SUB;}
 "*"   	{return MUL;}
