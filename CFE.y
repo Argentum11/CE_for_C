@@ -1,107 +1,140 @@
 %{
 #include <stdio.h>
 #include <math.h>
+#include <string.h>
 #include <stdlib.h>
 #include "CFE.tab.h"
 #include <ctype.h>
+#include <math.h>
 
-double variables[256];
+#define MAX_VAR_NUM 100
+#define MAX_VAR_NAME_LEN 30
 int flag1;
 
-void yyerror(const char *s);
+
+typedef struct {
+    char name[MAX_VAR_NAME_LEN];
+    double value;
+} Variable;
+
+Variable variables[MAX_VAR_NUM];
+int var_count = 0;
 
 %}
 
-%union {
-    double dval;
-    char sval;
-    int ival;
-    int is_print;
-    struct {
-        int condition;
-        double value;
-    } if_stmt_type;
-}
-
-
-%type <dval> exp factor term
-%type <is_print> stmt
-%type <if_stmt_type> if_stmt
-%token <dval> NUMBER
-%token <sval> VAR
+%token  NUMBER VAR STRING
 %token STORE END PRINT
+%token ADD SUB MUL DIV ABS LOG
+%token OUTPUT OUTPUT_OPERATOR NEWLINE EOL 
 %token BIGGER
 %token SMALLER
-%token ADD SUB MUL DIV ABS LOG
-%token EOL
+%token BIGEQUAL
+%token SMALLEQUAL
+%token EQUAL
 %token POW
 %token SQRT
 %token COS SIN TAN
 %token MOD
-%token COMMA
-%token <ival> IF THEN ELSE
-%nonassoc IF
-%nonassoc THEN
-%nonassoc ELSE
+%token IF ELSE LBRACE RBRACE
 
 %left '-' '+'
 %left '*' '/' '^'
-
 %%
 
-stmt_list:
-        | stmt_list stmt EOL
-        ;
 
-stmt:     exp { $$ = 0; }
-        | VAR STORE exp { variables[$1] = $3; printf("store %g\n", $3); $$ = 0; }
-        | if_stmt {printf("in condition %d\n",$1.condition) if ($1.condition) { printf("in condition 1 true %d\n",flag1);flag1 = 1; } else { printf("false\n"); flag1 = 0;} $$ = 0; }
-        | PRINT exp { printf("in print flag : %d\n",flag1); if(flag1==1) {printf("%lf\n",$2); $$ = 1; }}
-       
-        ;
+calclist:
+  |calclist VAR STORE exp END EOL { 
+          int found = 0,i;
+          for (i = 0; i < var_count; i++) {
+              if (strcmp(variables[i].name, (char*)$2) == 0) {
+                  variables[i].value = $4;
+                  printf("store %s = %lf\n", variables[i].name, variables[i].value);
+                  found = 1;
+                  break;
+              }
+          }
+          if (!found) {
+              Variable var;
+              var.value = $4;
+              strcpy(var.name, (char*)$2);
+              variables[var_count++] = var;
+              printf("store %s = %lf\n", variables[var_count-1].name, variables[var_count-1].value);
+          }
+      }
+  | calclist IF '(' exp ')' LBRACE OUTPUT output_item END RBRACE EOL
+    { if ($3 > 0) { yyparse(); } }
+  | calclist if_stmt EOL {}
+  |calclist OUTPUT output_item END EOL{}
+  ;
 
+output_item:OUTPUT_OPERATOR exp{if(flag1!=0){printf ("%d",$2);}flag1=1;}
+  |OUTPUT_OPERATOR STRING{printf ("%s",$2);}
+  |OUTPUT_OPERATOR NEWLINE{printf ("\n");}
+  |output_item OUTPUT_OPERATOR exp{if(flag1!=0){printf ("%d",$2);}flag1=1;}
+  |output_item OUTPUT_OPERATOR STRING{printf ("%s",$3);}
+  |output_item OUTPUT_OPERATOR NEWLINE{printf ("\n");}
+  ;
 if_stmt:
-          IF exp THEN stmt { $$.condition = $2 > 0; printf("in $2 flag : %d\n",$2); if ($2 > 0) { if ($4 == 1) { printf("in is true\n"); flag1 = 1;} } else { printf("false\n");flag1 = 0; } }
-        | IF exp THEN stmt %prec ELSE ELSE stmt { $$.condition = $2 > 0; if ($2 > 0) { if ($4 == 1) { printf("true\n" );flag1 = 1; } } else { if ($6 == 1) { printf("false\n");flag1 = 0; } } }
-        ;
+  IF '(' exp ')' LBRACE calclist RBRACE
+    { if ($3 <= 0) { yyparse(); flag1=0;} }
+  | IF '(' exp ')' LBRACE calclist RBRACE ELSE LBRACE calclist RBRACE
+    { if ($3 > 0) { yyparse(); } else { yyparse(); } }
+  | IF '(' exp ')' LBRACE calclist RBRACE
+    { if ($3 > 0) { yyparse(); } }
+  | IF '(' exp ')' LBRACE calclist RBRACE ELSE LBRACE calclist RBRACE
+    { if ($3 > 0) { yyparse(); } else { yyparse(); } }
+  ;
 
 
+exp:factor {$$ = $1;}
+  |exp ADD factor{$$=$1+$3;}
+  |exp SUB factor{$$=$1-$3;}
+  |exp POW factor { $$ = pow($1, $3); }
+  |SUB factor{$$=-$2;}
+  ;
 
-
-
-exp: factor
-    | exp ADD factor { $$ = $1 + $3; }
-    | exp SUB factor { $$ = $1 - $3; }
-    | exp POW factor { $$ = pow($1, $3); }
-    | SUB factor { $$ = -$2; }
-    ;
-
-factor: term
-      | factor MUL term { $$ = $1 * $3; }
-      | factor DIV term { $$ = $1 / $3; }
-      | factor MOD term { $$ = fmod($1, $3); }
-      | factor BIGGER term { $$ = $1 > $3 ? 1 : 0; }
-      | factor SMALLER term { $$ = $1 < $3 ? 1 : 0; }
-      ;
-
-term: NUMBER { $$ = $1; }
-    | LOG term { $$ = log10($2); }
-    | ABS exp ABS { $$ = $2 >= 0 ? $2 : -$2; }
-    | SQRT '(' exp ')' { $$ = sqrt($3); }
-    | COS '(' exp ')' { $$ = cos($3); }
-    | SIN '(' exp ')' { $$ = sin($3); }
-    | TAN '(' exp ')' { $$ = tan($3); }
-    | '(' exp ')' { $$ = $2; }
-    | VAR { $$ = variables[$1]; }
-    ;
-
+factor:term {$$=$1;}
+  |factor MUL term{$$=$1*$3;}
+  |factor DIV term{$$=$1/$3;}
+  | factor MOD term { $$ = fmod($1, $3); }
+  | factor BIGGER term { $$ = $1 > $3 ? 1 : 0; }
+  | factor SMALLER term { $$ = $1 < $3 ? 1 : 0; }
+  | factor BIGEQUAL term { $$ = $1 >= $3 ? 1 : 0; }
+  | factor SMALLEQUAL term { $$ = $1 <= $3 ? 1 : 0; }
+  | factor EQUAL term { $$ = $1 == $3 ? 1 : 0; }
+  ;
+  
+term:NUMBER {$$=$1;}
+  |VAR { 
+          int found = 0,i;
+          for (i = 0; i < var_count; i++) {
+              if (strcmp(variables[i].name, (char*)$1) == 0) {
+                  $$ = variables[i].value;
+                  
+                  found = 1;
+                  break;
+              }
+          }
+          if (!found) {
+              printf("variable %s not found\n", (char*)$1);
+          }
+      }
+  |LOG term {$$ = log($2);}
+  |ABS exp ABS {$$=$2>=0?$2:-$2;}
+  | SQRT '(' exp ')' { $$ = sqrt($3); }
+  | COS '(' exp ')' { $$ = cos($3); }
+  | SIN '(' exp ')' { $$ = sin($3); }
+  | TAN '(' exp ')' { $$ = tan($3); }
+  |STRING {$$=$1;}
+  |'(' exp ')' { $$ = $2; }
+  ;
 %%
 
-int main(int argc, char **argv) {
-    yyparse();
-    return 0;
+main(int argc,char **argv){
+	yyparse();
 }
 
-void yyerror(const char *s) {
-    fprintf(stderr, "Error: %s\n", s);
+yyerror(char *s)
+{
+ fprintf(stderr,"error:%s\n",s);
 }
