@@ -76,7 +76,7 @@ output_item:OUTPUT_OPERATOR exp{if(flag1!=0){printf ("%d",$2);}flag1=1;}
   ;
 if_stmt:
   IF '(' exp ')' LBRACE calclist RBRACE
-    { if ($3 <= 0) { yyparse(); flag1=0;} }
+    { if ($3 < 0 || $3==0) { yyparse(); flag1=0;} }
   | IF '(' exp ')' LBRACE calclist RBRACE ELSE LBRACE calclist RBRACE
     { if ($3 > 0) { yyparse(); } else { yyparse(); } }
   | IF '(' exp ')' LBRACE calclist RBRACE
