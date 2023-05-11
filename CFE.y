@@ -9,7 +9,7 @@
 
 #define MAX_VAR_NUM 100
 #define MAX_VAR_NAME_LEN 30
-int flag1;
+int flag1=1;
 
 
 typedef struct {
@@ -33,6 +33,7 @@ int var_count = 0;
 %token EQUAL
 %token POW
 %token SQRT
+
 %token COS SIN TAN
 %token MOD
 %token IF ELSE LBRACE RBRACE
@@ -68,21 +69,17 @@ calclist:
   ;
 
 output_item:OUTPUT_OPERATOR exp{if(flag1!=0){printf ("%d",$2);}flag1=1;}
-  |OUTPUT_OPERATOR STRING{printf ("%s",$2);}
-  |OUTPUT_OPERATOR NEWLINE{printf ("\n");}
+  |OUTPUT_OPERATOR STRING{if(flag1!=0){printf ("%s",$2);}flag1=1;}
+  |OUTPUT_OPERATOR NEWLINE{if(flag1!=0){printf ("\n");}flag1=1;}
   |output_item OUTPUT_OPERATOR exp{if(flag1!=0){printf ("%d",$2);}flag1=1;}
-  |output_item OUTPUT_OPERATOR STRING{printf ("%s",$3);}
-  |output_item OUTPUT_OPERATOR NEWLINE{printf ("\n");}
+  |output_item OUTPUT_OPERATOR STRING{if(flag1!=0){printf ("%s",$3);}flag1=1;}
+  |output_item OUTPUT_OPERATOR NEWLINE{if(flag1!=0){printf ("\n");}flag1=1;}
   ;
 if_stmt:
   IF '(' exp ')' LBRACE calclist RBRACE
-    { if ($3 < 0 || $3==0) { yyparse(); flag1=0;} }
+    {  }
   | IF '(' exp ')' LBRACE calclist RBRACE ELSE LBRACE calclist RBRACE
-    { if ($3 > 0) { yyparse(); } else { yyparse(); } }
-  | IF '(' exp ')' LBRACE calclist RBRACE
-    { if ($3 > 0) { yyparse(); } }
-  | IF '(' exp ')' LBRACE calclist RBRACE ELSE LBRACE calclist RBRACE
-    { if ($3 > 0) { yyparse(); } else { yyparse(); } }
+    {  }
   ;
 
 
@@ -97,11 +94,11 @@ factor:term {$$=$1;}
   |factor MUL term{$$=$1*$3;}
   |factor DIV term{$$=$1/$3;}
   | factor MOD term { $$ = fmod($1, $3); }
-  | factor BIGGER term { $$ = $1 > $3 ? 1 : 0; }
-  | factor SMALLER term { $$ = $1 < $3 ? 1 : 0; }
-  | factor BIGEQUAL term { $$ = $1 >= $3 ? 1 : 0; }
-  | factor SMALLEQUAL term { $$ = $1 <= $3 ? 1 : 0; }
-  | factor EQUAL term { $$ = $1 == $3 ? 1 : 0; }
+  | factor BIGGER term {if($1 > $3){$$=1;flag1=1;}else{$$=0;flag1=0;} }
+  | factor SMALLER term { if($1 < $3){$$=1;flag1=1;}else{$$=0;flag1=0;} }
+  | factor BIGEQUAL term { if($1 > $3||$1==$3){$$=1;flag1=1;}else{$$=0;flag1=0;} }
+  | factor SMALLEQUAL term { if($1 < $3||$1==$3){$$=1;flag1=1;}else{$$=0;flag1=0;}}
+  | factor EQUAL term {if($1 == $3){$$=1;flag1=1;}else{$$=0;flag1=0;} }
   ;
   
 term:NUMBER {$$=$1;}

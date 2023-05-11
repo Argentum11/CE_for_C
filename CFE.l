@@ -31,6 +31,7 @@
 
 "if" { return IF; }
 "else" { return ELSE; }
+
 "{" { return LBRACE; }
 "}" { return RBRACE; }
 "%"     {return MOD;}
