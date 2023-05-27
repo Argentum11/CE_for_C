@@ -1,6 +1,7 @@
 %{
 #include "CFE.tab.h"
 #include <string.h>
+#include <stdio.h>
 %}
 
 
@@ -16,10 +17,29 @@
 "-"   	{return SUB;}
 "*"   	{return MUL;}
 "/"   	{return DIV;}
+"^"     {return POW;}
 "|"   	{return ABS;}
 "="     {return STORE;}
 ";"     {return END;}
+
+
+">"     {return BIGGER;}
+"<"     {return SMALLER;}
+">="     {return BIGEQUAL;}
+"<="     {return SMALLEQUAL;}
+"=="     {return EQUAL;}
+"sqrt"  {return SQRT;}
+"cos"   {return COS;}
+"sin"   {return SIN;}
+"tan"   {return TAN;}
 "log"   {return LOG;}
+
+"if" { return IF; }
+"else" { return ELSE; }
+
+"{" { return LBRACE; }
+"}" { return RBRACE; }
+"%"     {return MOD;}
 "print" {return PRINT;}
 [()]    {return yytext[0]; }
 [0-9]+ 	{yylval.num = atof(yytext);return NUMBER;}
