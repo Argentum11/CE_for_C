@@ -3,11 +3,15 @@
 #include <string.h>
 %}
 
+
 %%
 
 "cout"  {return OUTPUT;}
 "<<"    {return OUTPUT_OPERATOR;}
 "endl"  {return NEWLINE;}
+"int"   {return TYPE_INT;}
+"double"    {return TYPE_DOUBLE;}
+"string"    {return TYPE_STRING;}
 "+"   	{return ADD;}
 "-"   	{return SUB;}
 "*"   	{return MUL;}
@@ -18,7 +22,7 @@
 "log"   {return LOG;}
 "print" {return PRINT;}
 [()]    {return yytext[0]; }
-[0-9]+ 	{yylval = atoi(yytext);return NUMBER;}
+[0-9]+ 	{yylval.num = atof(yytext);return NUMBER;}
 \"[ _a-zA-z0-9\t\"\']*\" 	{
     yytext[strlen(yytext)-1]='\0';
     int i;
@@ -62,14 +66,21 @@
             }
         }
     }
-    yylval=strdup(yytext);
+    yylval.str=strdup(yytext);
     return STRING;}
 [(][-][0-9]+[)] 	{
     yytext[0]=' '; 
     yytext[strlen(yytext)-1]=' ';
-    yylval=atoi(yytext);
+    yylval.num=atof(yytext);
     return NUMBER;}
-[_a-zA-Z][_a-zA-z0-9]*	{  yylval=strdup(yytext);return VAR;}
+[0-9]+\.[0-9]+ 	{yylval.num=atof(yytext);return NUMBER_DOUBLE;}
+[(][-][0-9]+\.[0-9]+[)] {
+    yytext[0]=' '; 
+    yytext[strlen(yytext)-1]=' ';
+    yylval.num=atof(yytext);
+    return NUMBER_DOUBLE;
+}
+[_a-zA-Z][_a-zA-z0-9]*	{  yylval.str=strdup(yytext);return VAR;}
 \n  	{return EOL;}
 [ \t] 	{/*空白忽略*/}
 . 	{printf("Invaild symbol %c\n",*yytext);}

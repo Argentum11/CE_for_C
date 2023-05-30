@@ -1,6 +1,6 @@
 # Result
 
-|           filepath            | passed | SUBTOTAL |
+|           filepath            | failed | SUBTOTAL |
 | ----------------------------- | -----: | -------: |
 | test_arithmetic_operations.py |      5 |        5 |
 | test_math_function.py         |      2 |        2 |
@@ -9,4 +9,4 @@
 
 ### Test time
 
-Report generated on 2023-05-04 at 22:49:54
+Report generated on 2023-05-10 at 00:12:09
