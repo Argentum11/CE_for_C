@@ -1,22 +1,23 @@
 from run_command import *
-import random
-import math
 
 #######################################################################
-def create_abs_command(number):
+def abs_command(number):
     command = f'cout<<|{number}|<<endl;'
     return command
 
-def test_abs_positive():
-    positive_integer = random.randint(0, 1000000)
-    command = create_abs_command(positive_integer)
-    expected_output = f'{positive_integer}'
+def abs(number):
+    command = abs_command(number)
+    expected_output = f'{number}'
+    if number<0:
+        expected_output = f'{abs(number)}'
     case = Case(command, expected_output)
     assert case.expected_output == run_command(case)
 
-def test_abs_negative():
-    negative_integer = random.randint(-1000000, -1)
-    command = create_abs_command(negative_integer)
-    expected_output = f'{abs(negative_integer)}'
-    case = Case(command, expected_output)
-    assert case.expected_output == run_command(case)
+def test_abs_positive():
+    # positive
+    positive_integer = get_random_number(POSITIVE, INT)
+    abs(positive_integer)
+
+    # negative
+    negative_integer = get_random_number(POSITIVE, INT)
+    abs(negative_integer)
