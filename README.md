@@ -40,5 +40,6 @@ You should see the following result
 |name|work|
 |-|-|
 |[張銀軒](https://github.com/Argentum11)|負數、所有的 pytest 測試、github project 管理|
-|[林佳何](https://github.com/0-ch)|多個變數儲存、變數運算、印出變數|
-|[王丞頤](https://github.com/WCY91)|小數、單一變數、三角函數、餘數、次方、開根號|
+|[林佳何](https://github.com/0-ch)|多個變數儲存、變數運算、印出變數、小數|
+|[王丞頤](https://github.com/WCY91)|三角函數、餘數、次方、開根號、if/else、 $\leq$ 、 $\geq$ 、 > 、 < 、 ==|
+
