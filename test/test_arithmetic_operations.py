@@ -91,8 +91,6 @@ def total_decimal_points(num1, num1_type, num2, num2_type):
         sum = sum + (final_index - point_index)
     return sum
 
-        
-
 sign_combination = {(POSITIVE, POSITIVE), (POSITIVE, NEGATIVE),
                     (NEGATIVE, POSITIVE), (NEGATIVE, NEGATIVE)}
 type_combination = {(INT, DOUBLE), (INT, INT), (DOUBLE, INT), (DOUBLE, DOUBLE)}
@@ -133,8 +131,7 @@ def test_addition():
             addend = get_random_number(addend_sign, addend_type)
             addition(augend, augend_type, addend, addend_type)
 
-# #######################################################################
-
+########################################################################
 
 def create_subtract_command(minuend, subtrahend, type):
     minuend: str = number_for_command(minuend)
@@ -168,7 +165,7 @@ def test_subtraction():
             subtrahend = get_random_number(subtrahend_sign, subtrahend_type)
             subtraction(minuend, minuend_type, subtrahend, subtrahend_type)
 
-# #######################################################################
+########################################################################
 
 
 def create_multiply_command(multiplicand, multiplier):
@@ -242,4 +239,18 @@ def test_parenthesis():
         num_2 = get_random_number(POSITIVE, INT)
         num_3 = get_random_number(POSITIVE, INT)
         parenthesis(num_1, num_2, num_3)
-test_parenthesis()
+
+#######################################################################
+def pow_command(num_1, num_2):
+    command = f'cout<<{num_1}^{num_2}<<endl;'
+    return command
+
+def run_pow(num_1, num_2):
+    command = pow_command(num_1, num_2)
+    expected_output = f'{pow(num_1, num_2)}'
+    case = Case(command, expected_output)
+    assert case.expected_output == run_command(case)
+
+def test_pow():
+    run_pow(2, 4)
+    run_pow(7, 3)
