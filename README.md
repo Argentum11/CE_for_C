@@ -39,6 +39,7 @@ You should see the following result
 
 |指令名稱|範例|輸出|
 |-|-|-|
+|輸出數字運算|cout<<2+3*4-10/5;|12|
 |儲存整數|int a=123;||
 |輸出整數|cout<<a<<endl;|123\n|
 |儲存整數|int aa=1023;||
