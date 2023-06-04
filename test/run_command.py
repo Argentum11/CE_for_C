@@ -52,6 +52,7 @@ STORE = "store"
 COUT = "cout"
 ENDL = "endl"
 NEWLINE = "\n"
+TAB = "\t"
 
 INT = 2
 DOUBLE = 3
