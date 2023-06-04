@@ -37,9 +37,9 @@ You should see the following result
 
 #### 使用說明
 
-|指令|範例|
-|-|-|
-|if/else||
+|指令名稱|範例|輸出|
+|-|-|-|
+|if/else|||
 
 ## 分工
 
