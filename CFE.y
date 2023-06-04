@@ -251,7 +251,7 @@ term:NUMBER {$$=$1; if($1==0){flag1=0;}}
               printf("variable %s not found\n", (char*)$1);
           }
       }
-  |LOG term {$$ = log($2);}
+  |LOG term {$$ = log10($2);}
   |ABS exp ABS {$$=$2>=0?$2:-$2;}
   | SQRT '(' exp ')' { $$ = sqrt($3); }
   | COS '(' exp ')' { $$ = cos($3); }
