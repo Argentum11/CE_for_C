@@ -39,7 +39,20 @@ You should see the following result
 
 |指令名稱|範例|輸出|
 |-|-|-|
-|if/else|||
+|if|if(3>2){cout << 2222 << endl;}|2222|
+|if|if(3<2){cout << 2222 << endl;}|換行
+|sqrt|cout << sqrt(4) << endl;|2|
+|cos|cout << cos(1) << endl;|0.54|
+|sin|cout << sin(1) << endl;|0.841|
+|tan|cout << tan(1) << endl;|1.5571|
+|^|cout << 2^3 << endl;|8|
+|%|cout << 3%2 << endl;|1|
+|>|cout << (3>2) << endl;|1|
+|<|cout << (3<4) << endl;|1|
+|>=|cout << (3>=2) << endl;|1|
+|<=|cout << (3<=4) << endl;|1|
+|==|cout << (2==2) << endl;|1|
+
 
 ## 分工
 
