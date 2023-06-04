@@ -21,7 +21,7 @@ def run_command(case:Case):
       output = my_file.read()
   return output
 
-def adjust_number_for_command(number):
+def number_for_command(number):
     if(number < 0):
         result = f'({number})'
     else:
@@ -40,6 +40,9 @@ def delete_newline_for_case(case:Case):
 def truth_or_false():
    return random.choice([True, False])
 
+def variable_output_command(variable_name:str):
+   return f'cout<<{variable_name}<<endl;'
+
 # Global constants
 VAR = "a1"
 ASSIGN = "="
@@ -49,3 +52,16 @@ STORE = "store"
 COUT = "cout"
 ENDL = "endl"
 NEWLINE = "\n"
+
+INT = 2
+DOUBLE = 3
+STRING = 4
+variable_type_list = [INT, DOUBLE]
+
+def type_str(type:int):
+    if type == INT:
+      return "int"
+    elif type == DOUBLE:
+        return "double"
+    else:
+       return "string"
