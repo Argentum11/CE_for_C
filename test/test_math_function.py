@@ -30,6 +30,7 @@ def degree_to_radian(degree):
 SIN = "sin"
 COS = "cos"
 TAN = "tan"
+LOG = "log"
 
 def trigonometric_command(function, radian):
     return f'cout<<{function}({radian})<<endl;'
@@ -72,7 +73,6 @@ tan_dict = {
     30: 0.57735,
     45: 1,
     60: 1.73205,
-    
 }
 
 def run_tan(degree):
@@ -85,3 +85,19 @@ def run_tan(degree):
 def test_tan():
     for degree in tan_dict.keys():
         run_tan(degree)
+#######################################################################
+log_dict = {
+    2: 0.30103,
+    3: 0.477121,
+    7: 0.845098,
+}
+
+def run_log(number):
+    command = trigonometric_command(LOG, number)
+    expected_output = log_dict[number]
+    case = Case(command, expected_output)
+    assert case.expected_output == run_command(case)
+
+def test_log():
+    for number in log_dict.keys():
+        run_log(number)
