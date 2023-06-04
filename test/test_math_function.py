@@ -31,8 +31,9 @@ SIN = "sin"
 COS = "cos"
 TAN = "tan"
 LOG = "log"
+SQRT = "sqrt"
 
-def trigonometric_command(function, radian):
+def math_fun_command(function, radian):
     return f'cout<<{function}({radian})<<endl;'
 
 sin_dict = {
@@ -43,7 +44,7 @@ sin_dict = {
 
 def run_sin(degree):
     radian = degree_to_radian(degree)
-    command = trigonometric_command(SIN, radian)
+    command = math_fun_command(SIN, radian)
     expected_output = sin_dict[degree]
     case = Case(command, expected_output)
     assert case.expected_output == run_command(case)
@@ -60,7 +61,7 @@ cos_dict = {
 
 def run_cos(degree):
     radian = degree_to_radian(degree)
-    command = trigonometric_command(COS, radian)
+    command = math_fun_command(COS, radian)
     expected_output = cos_dict[degree]
     case = Case(command, expected_output)
     assert case.expected_output == run_command(case)
@@ -77,7 +78,7 @@ tan_dict = {
 
 def run_tan(degree):
     radian = degree_to_radian(degree)
-    command = trigonometric_command(TAN, radian)
+    command = math_fun_command(TAN, radian)
     expected_output = tan_dict[degree]
     case = Case(command, expected_output)
     assert case.expected_output == run_command(case)
@@ -93,7 +94,7 @@ log_dict = {
 }
 
 def run_log(number):
-    command = trigonometric_command(LOG, number)
+    command = math_fun_command(LOG, number)
     expected_output = log_dict[number]
     case = Case(command, expected_output)
     assert case.expected_output == run_command(case)
@@ -101,3 +102,13 @@ def run_log(number):
 def test_log():
     for number in log_dict.keys():
         run_log(number)
+#######################################################################
+def run_sqrt(number):
+    command = math_fun_command(SQRT, number)
+    expected_output = int(math.sqrt(number))
+    case = Case(command, expected_output)
+    assert case.expected_output == run_command(case)
+
+def test_sqrt():
+    run_sqrt(16)
+    run_sqrt(100)
