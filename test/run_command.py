@@ -56,6 +56,8 @@ NEWLINE = "\n"
 INT = 2
 DOUBLE = 3
 STRING = 4
+POSITIVE = 1
+NEGATIVE = -1
 variable_type_list = [INT, DOUBLE]
 
 def type_str(type:int):
@@ -65,3 +67,12 @@ def type_str(type:int):
         return "double"
     else:
        return "string"
+    
+def get_random_number(sign, type):
+    if type == INT:
+        random_number = 0
+        while random_number==0:
+            random_number = random.randint(0, 100) * sign
+        return random_number
+    else:
+        return round(random.uniform(0, 100), 2) * sign

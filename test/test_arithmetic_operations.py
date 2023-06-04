@@ -1,20 +1,11 @@
 from run_command import *
 import random
 
-POSITIVE = 1
-NEGATIVE = -1
 # operation
 ADD = 1
 SUBTRACT = 2
 MULTIPLIY = 3
 DIVIDE = 4
-
-
-def get_random_number(sign, type):
-    if type == INT:
-        return random.randint(0, 100) * sign
-    else:
-        return round(random.uniform(0, 100), 2) * sign
 
 def float_to_int(num):
     num_str = str(num)
@@ -228,9 +219,12 @@ def test_division():
         divisor_type = INT
         dividend = get_random_number(dividend_sign, dividend_type)
         divisor = get_random_number(divisor_sign, divisor_type)
+        if(divisor==0):
+            divisor = 3
         division(dividend, divisor)
 
 #######################################################################
+# WARNING num_1, num_2 and num_3 should not be zero
 def create_parenthesis_command(num_1, num_2, num_3):
     # num_1*(num_2+num_3)
     command = f'cout<<{num_1}*({num_2}+{num_3})<<endl;'
@@ -248,3 +242,4 @@ def test_parenthesis():
         num_2 = get_random_number(POSITIVE, INT)
         num_3 = get_random_number(POSITIVE, INT)
         parenthesis(num_1, num_2, num_3)
+test_parenthesis()
