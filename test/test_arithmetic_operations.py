@@ -254,3 +254,18 @@ def run_pow(num_1, num_2):
 def test_pow():
     run_pow(2, 4)
     run_pow(7, 3)
+
+#######################################################################
+def mod_command(num_1, num_2):
+    command = f'cout<<{num_1}%{num_2}<<endl;'
+    return command
+
+def run_mod(num_1, num_2):
+    command = mod_command(num_1, num_2)
+    expected_output = f'{num_1%num_2}'
+    case = Case(command, expected_output)
+    assert case.expected_output == run_command(case)
+
+def test_mod():
+    run_mod(50, 9)
+    run_mod(10, 3)
