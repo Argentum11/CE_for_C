@@ -45,6 +45,15 @@ def fake_double_check(num, num_type):
         return int(num), INT
     else:
         return num, num_type
+    
+def double_fix(num):
+    num_str = str(num)
+    final_index = len(num_str)-1
+    point_index = num_str.find('.')
+    if(num_str[final_index]=='0' and final_index-point_index==1):
+        return int(num)
+    else:
+        return num
 
 def result_type(operation, num1, num1_type, num2, num2_type):
     # fake double
@@ -59,7 +68,6 @@ def result_type(operation, num1, num1_type, num2, num2_type):
         if(num2_type == DOUBLE):
             num2_int = float_to_int(num2)
         result = 0
-        print(num1_int , num2_int)
         if operation == ADD:
             result = num1_int + num2_int
         elif operation == SUBTRACT:
@@ -69,7 +77,6 @@ def result_type(operation, num1, num1_type, num2, num2_type):
         elif operation == DIVIDE:
             result = num1_int / num2_int
         ten_pow = pow(10, get_decimal_points(num1)+get_decimal_points(num2))
-        print(ten_pow)
         if result % ten_pow == 0:
             return INT
         else:
@@ -114,6 +121,7 @@ def addition(augend, augend_type, addend, addend_type):
     total = augend + addend
     if (augend_type == DOUBLE or addend_type == DOUBLE):
         total = round(total, 2)
+        total = double_fix(total)
     type = result_type(ADD, augend, augend_type, addend, addend_type)
     if type==INT:
         total = int(total)
@@ -149,6 +157,7 @@ def subtraction(minuend, minuend_type, subtrahend, subtrahend_type):
     difference = minuend - subtrahend
     if (minuend_type == DOUBLE or subtrahend_type == DOUBLE):
         difference = round(difference, 2)
+        difference = double_fix(difference)
     type = result_type(SUBTRACT, minuend, minuend_type, subtrahend, subtrahend_type)
     if type==INT:
         difference = int(difference)
@@ -156,7 +165,6 @@ def subtraction(minuend, minuend_type, subtrahend, subtrahend_type):
     expected_output = f'{difference}'
     case = Case(command, expected_output)
     assert case.expected_output == run_command(case)
-
 
 def test_subtraction():
     for x in sign_combination:
