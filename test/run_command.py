@@ -21,7 +21,7 @@ def run_command(case:Case):
       output = my_file.read()
   return output
 
-def adjust_number_for_command(number):
+def number_for_command(number):
     if(number < 0):
         result = f'({number})'
     else:
@@ -40,6 +40,9 @@ def delete_newline_for_case(case:Case):
 def truth_or_false():
    return random.choice([True, False])
 
+def variable_output_command(variable_name:str):
+   return f'cout<<{variable_name}<<endl;'
+
 # Global constants
 VAR = "a1"
 ASSIGN = "="
@@ -49,3 +52,28 @@ STORE = "store"
 COUT = "cout"
 ENDL = "endl"
 NEWLINE = "\n"
+TAB = "\t"
+
+INT = 2
+DOUBLE = 3
+STRING = 4
+POSITIVE = 1
+NEGATIVE = -1
+variable_type_list = [INT, DOUBLE]
+
+def type_str(type:int):
+    if type == INT:
+      return "int"
+    elif type == DOUBLE:
+        return "double"
+    else:
+       return "string"
+    
+def get_random_number(sign, type):
+    if type == INT:
+        random_number = 0
+        while random_number==0:
+            random_number = random.randint(0, 100) * sign
+        return random_number
+    else:
+        return round(random.uniform(0, 100), 2) * sign

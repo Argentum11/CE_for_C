@@ -1,12 +1,14 @@
 # Result
 
-|           filepath            | failed | SUBTOTAL |
+|           filepath            | passed | SUBTOTAL |
 | ----------------------------- | -----: | -------: |
-| test_arithmetic_operations.py |      5 |        5 |
-| test_math_function.py         |      2 |        2 |
-| test_var.py                   |      5 |        5 |
-| TOTAL                         |     12 |       12 |
+| test_arithmetic_operations.py |      7 |        7 |
+| test_comparison.py            |      5 |        5 |
+| test_if.py                    |      1 |        1 |
+| test_math_function.py         |      6 |        6 |
+| test_string.py                |      7 |        7 |
+| TOTAL                         |     26 |       26 |
 
 ### Test time
 
-Report generated on 2023-05-10 at 00:12:09
+Report generated on 2023-06-05 at 08:20:40

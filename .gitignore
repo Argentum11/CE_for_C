@@ -4,3 +4,4 @@ CFE.tab.h
 a.exe
 .vscode
 .pytest_cache
+*.out
