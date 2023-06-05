@@ -129,6 +129,7 @@ calclist:
       } 
 
   |calclist OUTPUT output_item END EOL{}
+  |error EOL{printf("An error occurred. Please try again.\n");}
   ;
 
 output_item:
@@ -162,6 +163,7 @@ output_item:
                                   }
                                   if (!found) {
                                       printf("Error: %s is not defined\n", $2);
+                                      printf("An error occurred. Please try again.\n");
                                   }
                                 }
   |OUTPUT_OPERATOR STRING{if(flag1!=0){printf("%s",$2);}flag1=1;}
@@ -194,6 +196,7 @@ output_item:
                                   }
                                   if (!found) {
                                       printf("Error: %s is not defined\n", $3);
+                                      printf("An error occurred. Please try again.\n");
                                   }
                                 }
   |output_item OUTPUT_OPERATOR exp{ if(flag1!=0){ printf("%g",$3);}flag1=1; }
