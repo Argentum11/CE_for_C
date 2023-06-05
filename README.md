@@ -35,7 +35,7 @@ You should see the following result
 
      Solution: Move your bison path (C:\GnuWin32\bin) to the top of the environment path variable list
 
-#### 使用說明
+## 使用說明
 
 |指令名稱|範例|輸出|
 |-|-|-|
