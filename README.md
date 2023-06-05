@@ -1,6 +1,6 @@
-# CFE_for_C
+# CE_for_C
 
-A compiler, formatter and executer for C
+A compiler and executer for C
 
 ## Environments
 
