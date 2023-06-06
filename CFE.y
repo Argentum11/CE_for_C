@@ -169,6 +169,7 @@ output_item:
   |OUTPUT_OPERATOR STRING{if(flag1!=0){printf("%s",$2);}flag1=1;}
   |OUTPUT_OPERATOR NEWLINE{if(flag1!=0){printf("\n");}flag1=1; }
   |OUTPUT_OPERATOR END{printf("missing variable / string / number\n");}
+  |output_item OUTPUT_OPERATOR END{printf("missing variable / string / number\n");}
   |output_item OUTPUT_OPERATOR VAR{
                                   int found = 0,i;
                                   for (i = 0; i < var_count; i++) {
