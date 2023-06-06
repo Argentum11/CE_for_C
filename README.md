@@ -37,6 +37,8 @@ You should see the following result
 
 ## 使用說明
 
+### 指令
+
 |指令名稱|範例|輸出|
 |-|-|-|
 |輸出數字運算|cout<<2+3*4-10/5;|12|
@@ -72,6 +74,21 @@ You should see the following result
 |<=|cout << (3<=4) << endl;|1|
 |==|cout << (2==2) << endl;|1|
 
+### 錯誤處理
+
+|error type|command example|command output|
+|-|-|-|
+|語法錯誤|cout<<;|error:syntax error\nAn error occurred. Please try again.|
+|變數錯誤|cout<<a;|error: a is not defined\nAn error occurred. Please try again.|
+|變數錯誤|cout<<a<<b;|error: a is not defined\nerror: b is not defined\nAn error occurred. Please try again.|
+|語法錯誤|a=1;|error:syntax error\nAn error occurred. Please try again.|
+|語法錯誤|double a = "123";|error:syntax error\nAn error occurred. Please try again.|
+|語法錯誤|string b = 123;|error:syntax error\nAn error occurred. Please try again.|
+|語法錯誤|if(){cout<<123;}|error:syntax error\nAn error occurred. Please try again.|
+|語法錯誤|i(1){cout<<123;}|error:syntax error\nAn error occurred. Please try again.|
+|語法錯誤|out<<123;|error:syntax error\nAn error occurred. Please try again.|
+|輸出錯誤|cout<<;|missing variable / string / number\nerror:syntax error\nAn error occurred. Please try again.|
+|輸出錯誤|int a=10; cout<<a<<;|10missing variable / string / number\nerror:syntax error\nAn error occurred. Please try again.|
 
 ## 分工
 

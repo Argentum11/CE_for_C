@@ -11,7 +11,7 @@
 #define MAX_VAR_NAME_LEN 30
 #define MAX_STRING_LEN 49
 int flag1=1;
-
+int error_flag = 0;
 typedef struct {
     char name[MAX_VAR_NAME_LEN];
     int value_int;
@@ -128,7 +128,8 @@ calclist:
           }
       } 
 
-  |calclist OUTPUT output_item END EOL{}
+  |calclist OUTPUT output_item END EOL{if(error_flag==1){printf("An error occurred. Please try again.\n");}error_flag=0;}
+  |error EOL{printf("An error occurred. Please try again.\n");}
   ;
 
 output_item:
@@ -161,11 +162,14 @@ output_item:
                                       }
                                   }
                                   if (!found) {
-                                      printf("Error: %s is not defined\n", $2);
+                                      printf("error: %s is not defined\n", $2);
+                                      error_flag=1;
                                   }
                                 }
   |OUTPUT_OPERATOR STRING{if(flag1!=0){printf("%s",$2);}flag1=1;}
   |OUTPUT_OPERATOR NEWLINE{if(flag1!=0){printf("\n");}flag1=1; }
+  |OUTPUT_OPERATOR END{printf("missing variable / string / number\n");}
+  |output_item OUTPUT_OPERATOR END{printf("missing variable / string / number\n");}
   |output_item OUTPUT_OPERATOR VAR{
                                   int found = 0,i;
                                   for (i = 0; i < var_count; i++) {
@@ -193,7 +197,8 @@ output_item:
                                       }
                                   }
                                   if (!found) {
-                                      printf("Error: %s is not defined\n", $3);
+                                      printf("error: %s is not defined\n", $3);
+                                      error_flag=1;
                                   }
                                 }
   |output_item OUTPUT_OPERATOR exp{ if(flag1!=0){ printf("%g",$3);}flag1=1; }
