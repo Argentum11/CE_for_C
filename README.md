@@ -88,6 +88,7 @@ You should see the following result
 |語法錯誤|i(1){cout<<123;}|error:syntax error\nAn error occurred. Please try again.|
 |語法錯誤|out<<123;|error:syntax error\nAn error occurred. Please try again.|
 |輸出錯誤|cout<<;|missing variable / string / number\nerror:syntax error\nAn error occurred. Please try again.|
+|輸出錯誤|int a=10; cout<<a<<;|10missing variable / string / number\nerror:syntax error\nAn error occurred. Please try again.|
 
 ## 分工
 
