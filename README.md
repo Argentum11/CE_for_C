@@ -94,7 +94,7 @@ You should see the following result
 
 |name|work|
 |-|-|
-|[張銀軒](https://github.com/Argentum11)|負數、所有的 pytest 測試、github project 管理|
-|[林佳何](https://github.com/0-ch)|宣告int、double、string型態變數、變數運算、輸出變數、字串、跳脫字元|
+|[張銀軒](https://github.com/Argentum11)|負數、cout錯誤處理、所有的 pytest 測試、github project 管理|
+|[林佳何](https://github.com/0-ch)|宣告int、double、string型態變數、變數運算、輸出變數、字串、跳脫字元、cout & 所有的錯誤處理|
 |[王丞頤](https://github.com/WCY91)|三角函數、餘數、次方、開根號、if/else、 $\leq$ 、 $\geq$ 、 > 、 < 、 ==|
 
