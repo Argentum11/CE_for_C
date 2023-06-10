@@ -1,6 +1,6 @@
 lex.yy.c
-CFE.tab.c
-CFE.tab.h
+*.tab.c
+*.tab.h
 a.exe
 .vscode
 .pytest_cache
